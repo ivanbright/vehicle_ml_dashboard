@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group View - Vehicle ML Dashboard</title>
+    <!-- Bootstrap 5.3.2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- FontAwesome for clean dashboard icons -->
+    <link href="https://cloudflare.com" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: var(--bs-body-tertiary);
+            min-height: 100vh;
+        }
+
+        /* Sticky sidebar wrapper */
+        .sidebar-container {
+            position: sticky;
+            top: 1.5rem;
+            z-index: 1020;
+        }
+
+        /* Refined ScrollSpy Area */
+        .dashboard-content-scroll {
+            position: relative;
+            height: calc(100vh - 7rem);
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        /* Smooth Scrollbar design for main panel */
+        .dashboard-content-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .dashboard-content-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .dashboard-content-scroll::-webkit-scrollbar-thumb {
+            background-color: var(--bs-border-color);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body data-bs-spy="scroll" data-bs-target="#dashboard-sidebar-nav" data-bs-smooth-scroll="true" tabindex="0">
+
+    <!-- Top Dashboard Navbar Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
+        <div class="container-fluid px-4">
+            <span class="navbar-brand mb-0 h1">
+                <i class="fa-solid fa-car-side me-2 text-primary"></i>Vehicle ML Dashboard
+            </span>
+            <button class="btn btn-outline-light btn-sm ms-auto" id="themeToggler" onclick="toggleTheme()">
+                <i class="fa-solid fa-moon"></i> Toggle Theme
+            </button>
+        </div>
+    </nav>
+
+    <div class="container-fluid px-4">
+        <div class="row">
+
+            <!-- Sidebar Navigation Left Column -->
+            <div class="col-12 col-md-4 col-xl-3 mb-4">
+                <div class="sidebar-container">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-header bg-transparent border-0 pt-3 pb-0">
+                            <h6 class="text-uppercase tracking-wider text-muted small mb-0">Analysis Navigation</h6>
+                        </div>
+                        <div class="card-body p-2">
+                            <nav id="dashboard-sidebar-nav" class="nav nav-pills flex-column gap-1">
+                                <a class="nav-link d-flex align-items-center" href="{% url 'dashboard' %}">
+                                    <i class="fa-solid fa-chart-simple me-3 text-center" style="width:20px;"></i>
+                                    <span>Frequency Tables (One-way)</span>
+                                </a>
+                                <a class="nav-link d-flex align-items-center" href="{% url 'price_filter' %}">
+                                    <i class="fa-solid fa-filter-circle-dollar me-3 text-center"
+                                        style="width:20px;"></i>
+                                    <span>Price Filter</span>
+                                </a>
+                                <a class="nav-link active d-flex align-items-center" href="{% url 'group_view' %}">
+                                    <i class="fa-solid fa-layer-group me-3 text-center" style="width:20px;"></i>
+                                    <span>Group by Manufacturer & Transmission</span>
+                                </a>
+                                <!-- Ready for your future expansion anchors -->
+                                <a class="nav-link d-flex align-items-center text-muted" href="#ml-predictions">
+                                    <i class="fa-solid fa-gauge me-3 text-center" style="width:20px;"></i>
+                                    <span>Model Predictions</span>
+                                </a>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scrollable Content Right Column -->
+            <div class="col-12 col-md-8 col-xl-9">
+                <div class="dashboard-content-scroll">
+
+                    <!-- Section: Grouped Data -->
+                    <section id="group-view" class="card shadow-sm border-0 mb-4">
+                        <div class="card-header bg-body border-bottom d-flex align-items-center py-3">
+                            <i class="fa-solid fa-layer-group text-primary me-2 fs-5"></i>
+                            <h5 class="card-title mb-0">Grouped by Manufacturer & Transmission</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                {{ grouped_html|safe }}
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Bootstrap 5.3.2 Bundled JS Bundle -->
+    <script src="https://jsdelivr.net"
+        integrity="sha384-C6RzsinM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+
+    <!-- Client-side Light/Dark Mode Switcher -->
+    <script>
+        function toggleTheme() {
+            const htmlNode = document.documentElement;
+            const currentTheme = htmlNode.getAttribute('data-bs-theme');
+            const targetTheme = currentTheme === 'light' ? 'dark' : 'light';
+            htmlNode.setAttribute('data-bs-theme', targetTheme);
+
+            const btnIcon = document.querySelector('#themeToggler i');
+            if (targetTheme === 'dark') {
+                btnIcon.className = "fa-solid fa-sun";
+            } else {
+                btnIcon.className = "fa-solid fa-moon";
+            }
+        }
+    </script>
+</body>
+
+</html>
